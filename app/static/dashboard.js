@@ -26,10 +26,13 @@ function validSnapshot(data) {
 
 function options(select, entries) {
   const previous = select.selectedOptions[0]?.dataset.key;
-  select.replaceChildren(new Option("Tümünü", ""));
-  // Index values keep even an empty factory identifier distinct from “all”.
-  entries.forEach(([label, key], index) => {
-    const option = new Option(label, String(index));
+  // Keep factory values selectable directly, including empty identifiers.
+  const keys = new Set(entries.map(([, key]) => key));
+  let allValue = "";
+  while (keys.has(allValue)) allValue += "_";
+  select.replaceChildren(new Option("Tümünü", allValue));
+  entries.forEach(([label, key]) => {
+    const option = new Option(label, key);
     option.dataset.key = key;
     select.add(option);
     if (key === previous) option.selected = true;
@@ -38,10 +41,9 @@ function options(select, entries) {
 
 function renderJobs() {
   if (!snapshot) return;
-  const statuses = [...new Set(snapshot.jobs.map((job) => job.status))];
-  const project = projectFilter.value === "" ? null : snapshot.projects[Number(projectFilter.value)];
-  const status = statusFilter.value === "" ? null : statuses[Number(statusFilter.value)];
-  const jobs = snapshot.jobs.filter((job) => (!project || job.project_key === project.id) &&
+  const project = projectFilter.selectedOptions[0]?.dataset.key ?? null;
+  const status = statusFilter.selectedOptions[0]?.dataset.key ?? null;
+  const jobs = snapshot.jobs.filter((job) => (project === null || job.project_key === project) &&
     (status === null || job.status === status));
   const container = byId("jobs");
   container.replaceChildren();
