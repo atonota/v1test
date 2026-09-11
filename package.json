@@ -1,0 +1,8 @@
+{
+  "name": "factory-status-dashboard",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {"build:css": "tailwindcss -i app/static/input.css -o app/static/styles.css --minify"},
+  "devDependencies": {"@tailwindcss/cli": "4.3.3", "tailwindcss": "4.3.3", "daisyui": "5.7.37", "@playwright/test": "1.58.2", "@axe-core/playwright": "4.11.1"}
+}
+
