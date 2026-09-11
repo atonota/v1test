@@ -6,4 +6,6 @@ __pycache__/
 .env
 playwright-report/
 test-results/
-
+app/dist/
+storybook-static/
+.factory-context.json

@@ -14,8 +14,8 @@ h2 { font-size: 18px; font-weight: 700; }
 h3 { font-size: 18px; font-weight: 650; line-height: 1.4; }
 .muted, .source-note { color: #54665b; }
 .source-note { font-size: 12px; margin-top: 12px; }
-.toolbar { display: flex; flex-direction: row; align-items: end; gap: 18px; padding: 22px; margin-top: 30px; background: #fff; border: 1px solid #dbe3dd; border-radius: 12px; }
-.field { flex: 1; min-width: 0; }
+.toolbar { gap: 18px; padding: 22px; margin-top: 30px; background: #fff; border: 1px solid #dbe3dd; border-radius: 12px; }
+.field { min-width: 0; }
 label { display: block; font-size: 13px; font-weight: 650; margin-bottom: 8px; }
 .select { width: 100%; max-width: none; min-height: 44px; background-color: #fff; border-color: #91a499; color: #182e29; }
 .btn-primary { min-height: 44px; padding: 0 28px; background: #205640; color: #fff; border-color: #205640; }
@@ -52,10 +52,11 @@ h3, p, dd, .project-chip, .status-badge { overflow-wrap: anywhere; }
 @media (max-width: 640px) {
   .topbar { padding: 16px 20px; } .brand-sub { display: none; }
   main { padding: 28px 20px 20px; }
-  .toolbar { flex-wrap: wrap; gap: 14px; padding: 16px; }
-  .field { flex-basis: 100%; } .toolbar .btn { width: 100%; }
+  .toolbar { gap: 14px; padding: 16px; }
   .metrics { grid-template-columns: 1fr; gap: 10px; }
   .metric { padding: 18px; } .metric strong { font-size: 28px; }
   .job-card { padding: 16px; } .job-details { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .snapshot-note { grid-template-columns: 1fr; }
 }
+
+@media (max-width: 359px) { main { padding-inline: 12px; } .topbar { padding-inline: 12px; } .brand { gap: 6px; letter-spacing: .03em; } }

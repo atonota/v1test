@@ -6,3 +6,7 @@ tests
 __pycache__
 .pytest_cache
 .env
+app/dist
+storybook-static
+test-results
+.factory-context

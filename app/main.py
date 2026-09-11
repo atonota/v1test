@@ -1,7 +1,8 @@
 """HTTP controllers; the only exposed files are explicitly listed view assets."""
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+import re
 from fastapi.responses import FileResponse, JSONResponse
 
 from app.application import SnapshotService, SnapshotUnavailable
@@ -29,19 +30,23 @@ def overview():
 
 @app.get("/")
 def homepage():
-    return FileResponse(VIEW / "index.html", media_type="text/html")
+    path = VIEW / "dist/index.html"
+    if not path.is_file():
+        raise HTTPException(status_code=503, detail="Arayüz derlemesi hazır değil.")
+    return FileResponse(path, media_type="text/html", headers={"Cache-Control":"no-cache"})
+
+
+@app.get('/assets/{filename}', include_in_schema=False)
+def compiled_asset(filename: str):
+    if not re.fullmatch(r'[A-Za-z0-9_-]+\.(js|css)', filename):
+        raise HTTPException(status_code=404)
+    path = VIEW / 'dist/assets' / filename
+    if not path.is_file() or path.is_symlink():
+        raise HTTPException(status_code=404)
+    return FileResponse(path, media_type='text/css' if filename.endswith('.css') else 'text/javascript',
+                        headers={'Cache-Control':'public, max-age=31536000, immutable'})
 
 
 @app.get("/static/styles.css", include_in_schema=False)
 def stylesheet():
     return FileResponse(VIEW / "static/styles.css", media_type="text/css")
-
-
-@app.get("/static/dashboard.css", include_in_schema=False)
-def dashboard_styles():
-    return FileResponse(VIEW / "static/dashboard.css", media_type="text/css")
-
-
-@app.get("/static/dashboard.js", include_in_schema=False)
-def dashboard_script():
-    return FileResponse(VIEW / "static/dashboard.js", media_type="text/javascript")

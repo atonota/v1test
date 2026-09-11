@@ -1,3 +1,5 @@
+import "./core.css";
+import { installAdaptiveFilters } from "./loader.js";
 "use strict";
 const byId = (id) => document.getElementById(id);
 const projectFilter = byId("project-filter");
@@ -123,3 +125,5 @@ projectFilter.addEventListener("change", renderJobs);
 statusFilter.addEventListener("change", renderJobs);
 byId("refresh").addEventListener("click", refresh);
 refresh();
+
+installAdaptiveFilters(document.getElementById("filter-panel"));
