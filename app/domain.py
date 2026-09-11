@@ -1,9 +1,22 @@
 """The public snapshot contract; unknown fields never leave this boundary."""
+from math import isfinite
 from typing import Annotated
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, PlainValidator, field_validator
 
-Counter = Annotated[int | float, Field(ge=0, allow_inf_nan=False)]
+
+def validate_counter(value: object) -> int | float:
+    """Preserve integers without converting them to floating point."""
+    if type(value) is int:
+        if value >= 0:
+            return value
+    elif type(value) is float:
+        if isfinite(value) and value >= 0:
+            return value
+    raise ValueError("Counter must be a finite nonnegative number")
+
+
+Counter = Annotated[int | float, PlainValidator(validate_counter)]
 
 
 class SnapshotValue(BaseModel):
