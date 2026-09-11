@@ -1,0 +1,10 @@
+{
+  "project": "v1test",
+  "stage": "rc",
+  "source_sha": "2799d25c58f4961c5e7152ca8edae4fc53d3bdbf",
+  "image_id": "sha256:3f2c7b894e61a301d3bb663b459389902c89a0d7e3a4665b9cc58b0accbb7419",
+  "actual_image_id": "sha256:3f2c7b894e61a301d3bb663b459389902c89a0d7e3a4665b9cc58b0accbb7419",
+  "url": "http://localhost:8113",
+  "previous_image_id": null,
+  "deployed_at": "2026-09-11T20:15:48.977031+00:00"
+}
