@@ -1,0 +1,61 @@
+:root { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #182e29; background: #f5f7f5; font-synthesis: none; }
+body { margin: 0; min-width: 280px; }
+[hidden] { display: none !important; }
+a { color: inherit; }
+.topbar { min-height: 76px; padding: 16px max(24px, calc((100% - 1160px)/2)); display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #fff; border-bottom: 1px solid #dbe3dd; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; font-size: 14px; font-weight: 800; letter-spacing: .09em; }
+.brand-mark { display: grid; place-items: center; width: 34px; height: 34px; background: #205640; border-radius: 9px; color: #fff; font-size: 22px; }
+.brand-sub { font-size: 11px; color: #596b61; }
+.readonly { color: #365744; border: 1px solid #b6c9bd; background: #edf4ef; padding: 12px; white-space: nowrap; }
+main { max-width: 1208px; margin: auto; padding: 44px 24px 24px; }
+.eyebrow { font-size: 11px; letter-spacing: .16em; font-weight: 800; color: #39664c; margin-bottom: 12px; }
+h1 { font-size: clamp(1.8rem, 3.5vw, 2.65rem); font-weight: 750; letter-spacing: -.045em; line-height: 1.2; margin-bottom: 14px; }
+h2 { font-size: 18px; font-weight: 700; }
+h3 { font-size: 18px; font-weight: 650; line-height: 1.4; }
+.muted, .source-note { color: #54665b; }
+.source-note { font-size: 12px; margin-top: 12px; }
+.toolbar { display: flex; flex-direction: row; align-items: end; gap: 18px; padding: 22px; margin-top: 30px; background: #fff; border: 1px solid #dbe3dd; border-radius: 12px; }
+.field { flex: 1; min-width: 0; }
+label { display: block; font-size: 13px; font-weight: 650; margin-bottom: 8px; }
+.select { width: 100%; max-width: none; min-height: 44px; background-color: #fff; border-color: #91a499; color: #182e29; }
+.btn-primary { min-height: 44px; padding: 0 28px; background: #205640; color: #fff; border-color: #205640; }
+.btn-primary:hover { background: #173f2e; }
+:focus-visible { outline: 3px solid #156bba !important; outline-offset: 4px; }
+.feedback { margin: 18px 0; color: #405c4b; font-size: 14px; }
+.metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.metric { padding: 24px; background: #fff; border: 1px solid #dbe3dd; border-radius: 12px; }
+.metric > span { color: #54665b; font-size: 14px; }
+.metric strong { font-size: 36px; font-weight: 700; margin: 8px 0; line-height: 1.3; }
+.metric .state-value { font-size: 26px; color: #205640; margin-top: 15px; }
+.metric small { color: #54665b; font-size: 12px; }
+.projects-section, .jobs-section { margin-top: 30px; }
+.project-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.project-chip { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 10px 14px; background: #fff; border: 1px solid #dbe3dd; border-radius: 8px; font-size: 14px; }
+.project-state { font-size: 12px; color: #51644f; }
+.section-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
+.section-heading > span { font-size: 13px; }
+.job-list { display: grid; gap: 12px; }
+.job-card { padding: 22px; background: #fff; border: 1px solid #dbe3dd; border-radius: 12px; }
+.job-heading { display: flex; align-items: start; justify-content: space-between; gap: 16px; }
+.project-name { color: #54665b; font-size: 12px; margin-bottom: 4px; }
+.status-badge { background: #edf4ef; color: #205640; border: 1px solid #b6c9bd; height: auto; padding: 5px 10px; flex-shrink: 0; max-width: 40%; }
+.job-details { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; border-top: 1px solid #e4e9e5; padding-top: 16px; margin-top: 18px; }
+dt { color: #54665b; font-size: 12px; }
+dd { margin: 5px 0 0; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.snapshot-note { display: grid; grid-template-columns: 1fr 2fr; gap: 24px; padding: 22px; margin-top: 30px; background: #eaf0eb; border: 1px solid #d2ddd4; border-radius: 12px; }
+.snapshot-note h2 { font-size: 12px; color: #405c4b; margin-bottom: 8px; }
+.snapshot-note p { font-size: 14px; }
+footer { margin-top: 36px; padding-top: 20px; border-top: 1px solid #dbe3dd; color: #54665b; font-size: 12px; line-height: 1.8; }
+h3, p, dd, .project-chip, .status-badge { overflow-wrap: anywhere; }
+.skip-link { position: absolute; top: -100px; left: 16px; padding: 12px; background: #fff; z-index: 10; }
+.skip-link:focus { top: 12px; }
+@media (max-width: 640px) {
+  .topbar { padding: 16px 20px; } .brand-sub { display: none; }
+  main { padding: 28px 20px 20px; }
+  .toolbar { flex-wrap: wrap; gap: 14px; padding: 16px; }
+  .field { flex-basis: 100%; } .toolbar .btn { width: 100%; }
+  .metrics { grid-template-columns: 1fr; gap: 10px; }
+  .metric { padding: 18px; } .metric strong { font-size: 28px; }
+  .job-card { padding: 16px; } .job-details { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .snapshot-note { grid-template-columns: 1fr; }
+}
