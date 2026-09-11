@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="tr" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fabrika durum ve görev panosu</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="stylesheet" href="/static/dashboard.css">
+  <script src="/static/dashboard.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">İçeriğe geç</a>
+  <header class="topbar"><a class="brand" href="/" aria-label="Fabrika ana sayfa"><span class="brand-mark" aria-hidden="true">F</span> FABRİKA <span class="brand-sub">/ OPERASYON</span></a><span class="readonly badge">Salt okunur</span></header>
+  <main id="main">
+    <section class="intro" aria-labelledby="heading">
+      <p class="eyebrow">ÜRETİME GENEL BAKIŞ</p>
+      <h1 id="heading">Fabrika durum ve görev panosu</h1>
+      <p class="muted">Projeler, görevler ve son fabrika durumu tek yerde.</p>
+      <p class="source-note">Görev yönetimi: Plane <span aria-hidden="true">·</span> Orkestrasyon: Kestra</p>
+    </section>
+    <section class="toolbar card" aria-label="Görev filtreleri">
+      <div class="field"><label for="project-filter">Proje</label><select class="select" id="project-filter"><option value="">Tümünü</option></select></div>
+      <div class="field"><label for="status-filter">Durum</label><select class="select" id="status-filter"><option value="">Tümünü</option></select></div>
+      <button class="btn btn-primary" id="refresh" type="button">Yenile</button>
+    </section>
+    <p id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true">Yükleniyor…</p>
+    <div id="content" hidden>
+      <section class="metrics" aria-label="Fabrika özeti">
+        <div class="card metric"><span>Projeler</span><strong id="project-count"></strong><small>Snapshot içindeki tüm projeler</small></div>
+        <div class="card metric"><span>Görevler</span><strong id="job-count"></strong><small>Snapshot içindeki tüm görevler</small></div>
+        <div class="card metric"><span>Fabrika durumu</span><strong id="factory-state" class="state-value"></strong><small>Fabrikanın bildirdiği durum</small></div>
+      </section>
+      <section class="projects-section" aria-labelledby="projects-heading"><h2 id="projects-heading">Projeler</h2><div id="projects" class="project-list"></div></section>
+      <section class="jobs-section" aria-labelledby="jobs-heading"><div class="section-heading"><h2 id="jobs-heading">Görev akışı</h2><span id="result-count" class="muted"></span></div><div id="jobs" class="job-list"></div></section>
+      <section class="snapshot-note card" aria-label="Snapshot bilgileri"><div><h2>Son güncelleme</h2><p id="updated-at"></p></div><div><h2>Kredi notu</h2><p id="credit-note"></p></div></section>
+    </div>
+    <noscript><p class="feedback">Panoyu görüntülemek için tarayıcınızda JavaScript’i etkinleştirin.</p></noscript>
+    <footer>Bu pano yalnızca bilgi gösterir; görevlerde değişiklik yapmaz.<br>Otomatik erişilebilirlik kontrolleri, tam insan WCAG denetimi veya sertifikası değildir.</footer>
+  </main>
+</body>
+</html>
