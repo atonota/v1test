@@ -1,0 +1,4 @@
+.profile-compact { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+.profile-compact .filter-controls { grid-column: 1 / -1; grid-row: 2; display: grid; gap: 12px; }
+.profile-compact .filter-toggle { min-height: 44px; border: 1px solid #91a499; background: #f5f7f5; color: #182e29; }
+.profile-compact .btn-primary { min-height: 44px; padding-inline: 18px; }

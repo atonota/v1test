@@ -1,7 +1,8 @@
+import "./core.css";
+import { createFilterPanel } from "./components/filter-panel.js";
 "use strict";
 const byId = (id) => document.getElementById(id);
-const projectFilter = byId("project-filter");
-const statusFilter = byId("status-filter");
+const filters = createFilterPanel({ element: byId("filter-panel"), onChange: renderJobs, onRefresh: refresh });
 let snapshot = null;
 let requestNumber = 0;
 const number = new Intl.NumberFormat("tr-TR");
@@ -24,25 +25,9 @@ function validSnapshot(data) {
       [j.agent_calls, j.uncached_input_tokens, j.output_tokens].every(counter));
 }
 
-function options(select, entries) {
-  const previous = select.selectedOptions[0]?.dataset.key;
-  // Keep factory values selectable directly, including empty identifiers.
-  const keys = new Set(entries.map(([, key]) => key));
-  let allValue = "";
-  while (keys.has(allValue)) allValue += "_";
-  select.replaceChildren(new Option("Tümünü", allValue));
-  entries.forEach(([label, key]) => {
-    const option = new Option(label, key);
-    option.dataset.key = key;
-    select.add(option);
-    if (key === previous) option.selected = true;
-  });
-}
-
 function renderJobs() {
   if (!snapshot) return;
-  const project = projectFilter.selectedOptions[0]?.dataset.key ?? null;
-  const status = statusFilter.selectedOptions[0]?.dataset.key ?? null;
+  const { project, status } = filters.selection;
   const jobs = snapshot.jobs.filter((job) => (project === null || job.project_key === project) &&
     (status === null || job.status === status));
   const container = byId("jobs");
@@ -72,8 +57,7 @@ function renderJobs() {
 }
 
 function renderSnapshot() {
-  options(projectFilter, snapshot.projects.map((p) => [p.name, p.id]));
-  options(statusFilter, [...new Set(snapshot.jobs.map((j) => j.status))].map((status) => [status, status]));
+  filters.update(snapshot);
   byId("project-count").textContent = number.format(snapshot.projects.length);
   byId("job-count").textContent = number.format(snapshot.jobs.length);
   byId("factory-state").textContent = snapshot.paused ? "Duraklatıldı" : "Etkin";
@@ -119,7 +103,4 @@ async function refresh() {
     if (current === requestNumber) byId("content").setAttribute("aria-busy", "false");
   }
 }
-projectFilter.addEventListener("change", renderJobs);
-statusFilter.addEventListener("change", renderJobs);
-byId("refresh").addEventListener("click", refresh);
 refresh();

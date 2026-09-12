@@ -1,9 +1,11 @@
-.venv/
-node_modules/
+.venv
+node_modules
 __pycache__/
 .pytest_cache/
 *.pyc
 .env
 playwright-report/
 test-results/
-
+app/dist/
+storybook-static/
+.factory-context.json

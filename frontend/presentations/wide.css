@@ -1,0 +1,2 @@
+.profile-wide { display: flex; flex-direction: row; align-items: end; }
+.profile-wide .filter-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; flex: 1; }

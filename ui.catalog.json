@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "components": [
+    {"id":"task-filter","name":"Görev filtreleme / task filter","source":"frontend/components/filter-panel.js","stories":"frontend/components/filter-panel.stories.js","profiles":["compact","wide"],"capabilities":["keyboard","touch","mouse"],"shared":"filter selection, labels, API data","exclusive":"compact disclosure and wide arrangement","consumers":["factory-dashboard"]},
+    {"id":"dashboard-state","name":"Görev listesi / loading empty error / yükleniyor boş hata","source":"frontend/main.js","profiles":["shared"],"consumers":["factory-dashboard"]}
+  ]
+}

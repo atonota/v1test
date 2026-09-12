@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Fabrika durum ve görev panosu</title>
   <link rel="stylesheet" href="/static/styles.css">
-  <link rel="stylesheet" href="/static/dashboard.css">
-  <script src="/static/dashboard.js" defer></script>
+  
+  <script type="module" src="/main.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">İçeriğe geç</a>
@@ -18,9 +18,12 @@
       <p class="muted">Projeler, görevler ve son fabrika durumu tek yerde.</p>
       <p class="source-note">Görev yönetimi: Plane <span aria-hidden="true">·</span> Orkestrasyon: Kestra</p>
     </section>
-    <section class="toolbar card" aria-label="Görev filtreleri">
-      <div class="field"><label for="project-filter">Proje</label><select class="select" id="project-filter"><option value="">Tümünü</option></select></div>
-      <div class="field"><label for="status-filter">Durum</label><select class="select" id="status-filter"><option value="">Tümünü</option></select></div>
+    <section class="toolbar card" id="filter-panel" aria-label="Görev filtreleri">
+      <button class="btn filter-toggle" id="filter-toggle" type="button" aria-expanded="true" aria-controls="filter-controls" hidden>Filtreler</button>
+      <div class="filter-controls" id="filter-controls">
+        <div class="field"><label for="project-filter">Proje</label><select class="select" id="project-filter"><option value="">Tümünü</option></select></div>
+        <div class="field"><label for="status-filter">Durum</label><select class="select" id="status-filter"><option value="">Tümünü</option></select></div>
+      </div>
       <button class="btn btn-primary" id="refresh" type="button">Yenile</button>
     </section>
     <p id="feedback" class="feedback" role="status" aria-live="polite" aria-atomic="true">Yükleniyor…</p>
