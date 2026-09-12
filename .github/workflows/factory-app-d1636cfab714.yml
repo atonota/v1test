@@ -1,0 +1,34 @@
+name: Factory app d1636cfab714
+'on':
+  pull_request: {}
+  push:
+    branches:
+    - main
+permissions:
+  contents: read
+jobs:
+  app:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+    - name: Qualified app tests and build
+      shell: python
+      run: "import base64,json,pathlib,re,subprocess,sys\nconfig=json.loads(base64.b64decode('eyJzb3VyY2VfcGF0aCI6ICJhcHBzL3ZhbGlkYXRpb24tbmF0aXZlLXB5dGhvbi12OCIsICJpbWFnZSI6ICJweXRob25Ac2hhMjU2Ojc4Mzg3YmMzODgxYjgyNzMxMjBhMTJlYmU2YzFhYjIyYjAxOGNjYzJjOWFkZjU2NWFlMWFjOWI1MzZlMTg0ZWEiLCAiaW5zdGFsbCI6IFsicHl0aG9uIiwgIi1jIiwgImltcG9ydCBodHRwLnNlcnZlcix1bml0dGVzdDsgZnJvbSBwYXRobGliIGltcG9ydCBQYXRoOyBQYXRoKFwiaW5zdGFsbGVkLnR4dFwiKS53cml0ZV90ZXh0KFwic3RkbGliIGRlcGVuZGVuY2llcyBhdmFpbGFibGVcIikiXSwgInRlc3QiOiBbInB5dGhvbiIsICItSSIsICItQiIsICItbSIsICJ1bml0dGVzdCIsICJkaXNjb3ZlciIsICItdiIsICItcyIsICIuIiwgIi1wIiwgInRlc3QqLnB5Il0sICJidWlsZCI6IFsicHl0aG9uIiwgIi1jIiwgImltcG9ydCBweV9jb21waWxlLHNodXRpbDsgcHlfY29tcGlsZS5jb21waWxlKFwiYXBwLnB5XCIsZG9yYWlzZT1UcnVlKTsgc2h1dGlsLmNvcHlmaWxlKFwiYXBwLnB5XCIsXCJkaXN0LnB5XCIpIl0sICJkcml2ZXIiOiAicHl0aG9uIn0='))\n\
+        source=pathlib.Path(config['source_path']).resolve()\nif not source.is_relative_to(pathlib.Path.cwd().resolve()):raise\
+        \ SystemExit('invalid source path')\ncommands=[config['install'],config['test'],config['build']]\n\
+        if config['driver']=='node':\n    tests=sorted(str(p.relative_to(source))\
+        \ for p in source.rglob('*') if p.is_file() and p.suffix in ['.js','.cjs','.mjs']\
+        \ and (p.name.startswith(('test_','test-')) or '.test.' in p.name or str(p.relative_to(source)).startswith('tests/')))\n\
+        \    if not tests:raise SystemExit('no tests')\n    commands[1]+=tests\ncontainer=subprocess.check_output(['docker','create','--network','none','--cap-drop','ALL','--security-opt','no-new-privileges','--memory','512m','--cpus','1','--pids-limit','128','--workdir','/app','--entrypoint','sleep',config['image'],'300'],text=True).strip()\n\
+        try:\n    subprocess.run(['docker','cp',str(source)+'/.',container+':/app'],check=True)\n\
+        \    subprocess.run(['docker','start',container],check=True)\n    for index,argv\
+        \ in enumerate(commands):\n        result=subprocess.run(['docker','exec',container,*argv],text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=120)\n\
+        \        print(result.stdout)\n        if result.returncode:raise SystemExit(result.returncode)\n\
+        \        if index==1:\n            counts=re.findall(r'Ran (\\d+) tests? in\
+        \ ' if config['driver']=='python' else r'^# tests (\\d+)',result.stdout,re.M)\n\
+        \            if config['driver']=='python':\n                skipped=re.findall(r'skipped=(\\\
+        d+)',result.stdout);skipped=int(skipped[-1]) if skipped else 0\n         \
+        \   else:skipped=sum(int(value) for value in re.findall(r'^# (?:skipped|todo)\
+        \ (\\d+)',result.stdout,re.M))\n            if not counts or int(counts[-1])-skipped<=0:raise\
+        \ SystemExit('no executed framework tests observed')\nfinally:subprocess.run(['docker','rm','-f',container],check=False)\n"
