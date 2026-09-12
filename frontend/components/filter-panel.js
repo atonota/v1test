@@ -15,11 +15,7 @@ function options(select, entries) {
   });
 }
 
-/** Shared production controls, selection semantics and adaptive presentation. */
-export function createFilterPanel({
-  id = 'filters-' + crypto.randomUUID(), profile,
-  onChange = () => {}, onRefresh = () => {},
-} = {}) {
+function createControls(id) {
   const section = document.createElement('section');
   section.id = id;
   section.className = 'toolbar card';
@@ -33,22 +29,32 @@ export function createFilterPanel({
   const controls = document.createElement('div');
   controls.className = 'filter-controls'; controls.id = controlId('filter-controls');
   toggle.setAttribute('aria-controls', controls.id);
-  const selects = ['project-filter', 'status-filter'].map((name, index) => {
+  ['project-filter', 'status-filter'].forEach((name, index) => {
     const field = document.createElement('div'); field.className = 'field';
     const label = document.createElement('label'); label.textContent = ['Proje', 'Durum'][index];
     label.htmlFor = controlId(name);
     const select = document.createElement('select'); select.className = 'select'; select.id = label.htmlFor;
     options(select, []);
-    select.addEventListener('change', onChange);
     field.append(label, select); controls.append(field);
-    return select;
   });
-  const [projectFilter, statusFilter] = selects;
   const refresh = document.createElement('button');
   refresh.id = controlId('refresh');
   refresh.type = 'button'; refresh.className = 'btn btn-primary'; refresh.textContent = 'Yenile';
-  refresh.addEventListener('click', onRefresh);
   section.append(toggle, controls, refresh);
+  return section;
+}
+
+/** Enhance existing HTML or create catalog controls with the same behavior. */
+export function createFilterPanel({
+  id = 'filters-' + crypto.randomUUID(), profile, element,
+  onChange = () => {}, onRefresh = () => {},
+} = {}) {
+  const section = element ?? createControls(id);
+  const selects = [...section.querySelectorAll('select')];
+  const [projectFilter, statusFilter] = selects;
+  const refresh = section.querySelector('.btn-primary');
+  selects.forEach(select => select.addEventListener('change', onChange));
+  refresh.addEventListener('click', onRefresh);
   const adaptive = installAdaptiveFilters(section, { profile });
   return {
     element: section,
