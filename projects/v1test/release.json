@@ -1,10 +1,13 @@
 {
   "project": "v1test",
   "stage": "prod",
-  "source_sha": "2799d25c58f4961c5e7152ca8edae4fc53d3bdbf",
-  "image_id": "sha256:3f2c7b894e61a301d3bb663b459389902c89a0d7e3a4665b9cc58b0accbb7419",
-  "actual_image_id": "sha256:3f2c7b894e61a301d3bb663b459389902c89a0d7e3a4665b9cc58b0accbb7419",
+  "mode": "supervised_operator_delivery",
+  "root_task": "cd2d3525-f1e9-4c2f-9d2d-ab36ed2dc28b",
+  "automatic_root_status": "ERROR",
+  "source_sha": "973e2df84c731e576877d7472c14030844e6342b",
+  "image_id": "sha256:032677633fd541d9d504b854063350510c7cc894b4b8338e8b50b077d962be82",
+  "actual_image_id": "sha256:032677633fd541d9d504b854063350510c7cc894b4b8338e8b50b077d962be82",
   "url": "http://localhost:8114",
-  "previous_image_id": null,
-  "deployed_at": "2026-09-11T20:18:48.324169+00:00"
+  "previous_image_id": "sha256:3f2c7b894e61a301d3bb663b459389902c89a0d7e3a4665b9cc58b0accbb7419",
+  "deployed_at": "2026-09-12T06:42:55.262970+00:00"
 }
