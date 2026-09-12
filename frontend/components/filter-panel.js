@@ -1,25 +1,71 @@
 import { installAdaptiveFilters } from '../loader.js';
 
-/** Catalog factory using the same production loader and presentation modules. */
-export function createFilterPanel({ profile, projects = ['Birinci proje', 'İkinci proje'] } = {}) {
+function options(select, entries) {
+  const previous = select.selectedOptions[0]?.dataset.key;
+  // Keep factory values selectable directly, including empty identifiers.
+  const keys = new Set(entries.map(([, key]) => key));
+  let allValue = '';
+  while (keys.has(allValue)) allValue += '_';
+  select.replaceChildren(new Option('Tümünü', allValue));
+  entries.forEach(([label, key]) => {
+    const option = new Option(label, key);
+    option.dataset.key = key;
+    select.add(option);
+    if (key === previous) option.selected = true;
+  });
+}
+
+/** Shared production controls, selection semantics and adaptive presentation. */
+export function createFilterPanel({
+  id = 'filters-' + crypto.randomUUID(), profile,
+  onChange = () => {}, onRefresh = () => {},
+} = {}) {
   const section = document.createElement('section');
+  section.id = id;
   section.className = 'toolbar card';
   section.setAttribute('aria-label', 'Görev filtreleri');
-  const id = 'filters-' + crypto.randomUUID();
+  // Preserve the dashboard's existing control IDs; isolate catalog instances.
+  const controlId = name => id === 'filter-panel' ? name : `${id}-${name}`;
   const toggle = document.createElement('button');
+  toggle.id = controlId('filter-toggle');
   toggle.type = 'button'; toggle.className = 'btn filter-toggle'; toggle.textContent = 'Filtreler';
-  toggle.hidden = true; toggle.setAttribute('aria-expanded', 'true'); toggle.setAttribute('aria-controls', id);
-  const controls = document.createElement('div'); controls.className = 'filter-controls'; controls.id = id;
-  for (const [name, entries] of [['Proje', projects], ['Durum', ['RUNNING', 'ERROR', 'RELEASED']]]) {
+  toggle.hidden = true; toggle.setAttribute('aria-expanded', 'true');
+  const controls = document.createElement('div');
+  controls.className = 'filter-controls'; controls.id = controlId('filter-controls');
+  toggle.setAttribute('aria-controls', controls.id);
+  const selects = ['project-filter', 'status-filter'].map((name, index) => {
     const field = document.createElement('div'); field.className = 'field';
-    const label = document.createElement('label'); label.textContent = name; label.htmlFor = id + name;
+    const label = document.createElement('label'); label.textContent = ['Proje', 'Durum'][index];
+    label.htmlFor = controlId(name);
     const select = document.createElement('select'); select.className = 'select'; select.id = label.htmlFor;
-    select.add(new Option('Tümünü', ''));
-    entries.forEach(value => select.add(new Option(value, value)));
+    options(select, []);
+    select.addEventListener('change', onChange);
     field.append(label, select); controls.append(field);
-  }
-  const refresh = document.createElement('button'); refresh.type = 'button'; refresh.className = 'btn btn-primary'; refresh.textContent = 'Yenile';
+    return select;
+  });
+  const [projectFilter, statusFilter] = selects;
+  const refresh = document.createElement('button');
+  refresh.id = controlId('refresh');
+  refresh.type = 'button'; refresh.className = 'btn btn-primary'; refresh.textContent = 'Yenile';
+  refresh.addEventListener('click', onRefresh);
   section.append(toggle, controls, refresh);
-  installAdaptiveFilters(section, { profile });
-  return section;
+  const adaptive = installAdaptiveFilters(section, { profile });
+  return {
+    element: section,
+    get selection() {
+      return {
+        project: projectFilter.selectedOptions[0]?.dataset.key ?? null,
+        status: statusFilter.selectedOptions[0]?.dataset.key ?? null,
+      };
+    },
+    update({ projects, jobs }) {
+      options(projectFilter, projects.map(p => [p.name, p.id]));
+      options(statusFilter, [...new Set(jobs.map(j => j.status))].map(status => [status, status]));
+    },
+    dispose() {
+      adaptive.dispose();
+      selects.forEach(select => select.removeEventListener('change', onChange));
+      refresh.removeEventListener('click', onRefresh);
+    },
+  };
 }
