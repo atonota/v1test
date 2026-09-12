@@ -106,3 +106,23 @@ test('loading another profile does not contaminate the original visual presentat
   // Same browser/environment, actual pixel comparison; no automatic acceptance of changed baselines.
   expect(restored.equals(initial)).toBe(true);
 });
+
+test('cold and warm delivery remain usable with service-worker detection enabled', async ({ browser, baseURL }, info) => {
+  const context = await browser.newContext({ baseURL, serviceWorkers: 'allow', viewport: { width: 390, height: 844 } });
+  const page = await context.newPage();
+  await page.route('**/api/overview', route => route.fulfill({ json: structuredClone(data) }));
+  const passes = [];
+  for (const phase of ['cold', 'warm']) {
+    await page.goto('/');
+    await expect(page.locator('#filter-panel')).toHaveAttribute('data-profile', 'compact');
+    await expect(page.getByText('Birinci kontrol görevi', { exact: true })).toBeVisible();
+    const registrations = await page.evaluate(async () => navigator.serviceWorker ? (await navigator.serviceWorker.getRegistrations()).length : 0);
+    expect(registrations, 'A real SW requires its own controlled and uncontrolled profile contract').toBe(0);
+    const resources = await page.evaluate(() => performance.getEntriesByType('resource').map(r => ({ path: new URL(r.name).pathname.slice(1), transfer: r.transferSize })));
+    const inactive = Object.entries(graph.chunks).filter(([, chunk]) => chunk.profiles.includes('wide')).map(([file]) => file);
+    expect(resources.filter(r => inactive.includes(r.path))).toEqual([]);
+    passes.push({ phase, resources, serviceWorkers: registrations });
+  }
+  await info.attach('cold-warm-sw-evidence', { body: JSON.stringify(passes), contentType: 'application/json' });
+  await context.close();
+});

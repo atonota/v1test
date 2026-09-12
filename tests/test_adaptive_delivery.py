@@ -32,6 +32,6 @@ def test_build_rejects_an_eager_import_of_an_exclusive_profile(tmp_path):
     (tmp_path/'node_modules').symlink_to(repo/'node_modules',target_is_directory=True)
     main=tmp_path/'frontend/main.js'
     main.write_text("import './presentations/compact.js';\n"+main.read_text())
-    result=subprocess.run(['node',str(repo/'node_modules/vite/bin/vite.js'),'build'],cwd=tmp_path,text=True,capture_output=True,timeout=30)
+    result=subprocess.run(['node',str(repo/'node_modules/vite/bin/vite.js'),'build','--configLoader','runner'],cwd=tmp_path,text=True,capture_output=True,timeout=30)
     assert result.returncode!=0
     assert 'Exclusive presentation leaked into common entry' in result.stdout+result.stderr
